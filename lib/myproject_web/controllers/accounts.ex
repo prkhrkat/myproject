@@ -1,21 +1,19 @@
 defmodule MyprojectWeb.UserController do
   use MyprojectWeb, :controller
-  alias Myproject.Events.Event
-  alias Myproject.Accounts
   alias MyProject.Events
 
-  def list_users(conn, params) do
-    users =
+  def user_analytics(conn, params) do
+    events =
       if params["event_name"] do
-        event = Event.get_event(params["event_name"])
-        Events.list_event_users(event.id)
+        Events.list_required_events(params["event_name"])
       else
-        Accounts.list_users()
+        Events.list_all_events()
       end
+
     conn
     |> put_status(200)
     |> json(%{
-      list: users
+      data: events
     })
   end
 end

@@ -21,9 +21,15 @@ defmodule MyprojectWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", MyprojectWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", MyprojectWeb do
+    pipe_through :api
+    IO.inspect(("####"))
+
+    get("/v1/user_analytics", UserController, :user_analytics)
+    post("/v1/events", EventController, :create_event)
+    get("v1/event_analytics", EventController, :event_analytics)
+
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:myproject, :dev_routes) do

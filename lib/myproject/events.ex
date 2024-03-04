@@ -120,10 +120,35 @@ defmodule Myproject.Events do
     Repo.all(EventUser)
   end
 
-  def list_event_users(event_id) do
-    Repo.all(from eu in EventUser, where: eu.event_id == ^event_id)
+  def list_all_events() do
+    query = from e in Event,
+        join: eu in EventUser, on: e.id == eu.event_id,
+        group_by: eu.user_id,
+        select: %{
+          user_id: eu.user_id,
+          last_event_at: max(e.inserted_at),
+          event_count: count("*")
+        },
+        order_by: [desc: max(e.inserted_at)]
+
+    Repo.all(query)
   end
 
+  def list_required_events(event_name) do
+    query = from e in Event,
+        join: eu in EventUser, on: e.id == eu.event_id,
+        where: e.name == ^event_name,
+        group_by: eu.user_id,
+        select: %{
+          user_id: eu.user_id,
+          last_event_at: max(e.inserted_at),
+          event_count: count("*")
+        },
+        order_by: [desc: max(e.inserted_at)]
+
+    Repo.all(query)
+
+  end
   @doc """
   Gets a single event_user.
 

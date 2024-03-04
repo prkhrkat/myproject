@@ -7,6 +7,7 @@ defmodule Myproject.Accounts do
   alias Myproject.Repo
 
   alias Myproject.Accounts.User
+  alias Myproject.Events.Event
 
   @doc """
   Returns the list of users.
@@ -19,6 +20,10 @@ defmodule Myproject.Accounts do
   """
   def list_users do
     Repo.all(User)
+  end
+
+  def list_event_users(event_id) do
+    Repo.all(from u in Event, where: u.event_id == ^event_id)
   end
 
   @doc """

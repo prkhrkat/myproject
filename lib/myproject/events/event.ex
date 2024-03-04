@@ -6,7 +6,6 @@ defmodule Myproject.Events.Event do
     field :name, :string
     field :plan, :string
     field :billing_interval, :string
-    field :user_id, :id
 
     timestamps()
   end
